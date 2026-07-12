@@ -14,7 +14,9 @@ import traceback
 import cv2
 import numpy as np
 
-VERSION = "v1.00.00 (May-2026)"
+from version import __version__
+
+VERSION = f"v{__version__}"
 
 
 # ---------------------------------------------------------------------------
