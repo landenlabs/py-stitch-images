@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- This file was created with the aha Ansi HTML Adapter. https://github.com/theZiz/aha -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xml+xhtml; charset=UTF-8"/>
+<title>stdin</title>
+</head>
+<body>
+<pre>
+usage: colorize.py<span style="font-weight:bold;color:#2bf9fa;"> [-h]</span><span style="font-weight:bold;color:#2bf9fa;"> [--color</span> COLOR]<span style="font-weight:bold;color:#2bf9fa;"> [--find</span> PATTERN [PATTERN ...]]<span style="font-weight:bold;color:#2bf9fa;"> [--ignore-case]</span><span style="font-weight:bold;color:#2bf9fa;"> [--no-color]</span><span style="font-weight:bold;color:#2bf9fa;"> [--version]</span> [PATTERN ...]
+
+colorize v1.00.00 (May-2026)
+Colorize regex matches in piped text, with multiple color groups.
+
+positional arguments:
+  PATTERN               Bare patterns: when no<span style="font-weight:bold;color:#2bf9fa;"> --color</span><span style="font-weight:bold;color:#2bf9fa;">/--find</span> given, all positional args are joined by spaces and used as a single yellow regex
+
+options:
+<span style="font-weight:bold;color:#2bf9fa;">  -h</span>,<span style="font-weight:bold;color:#2bf9fa;"> --help</span>            show this help message and exit
+<span style="font-weight:bold;color:#2bf9fa;">  --color</span>,<span style="font-weight:bold;color:#2bf9fa;"> -c</span> COLOR     Open a new color group (name, #xxx, #xxxxxx, or r,g,b)
+<span style="font-weight:bold;color:#2bf9fa;">  --find</span>,<span style="font-weight:bold;color:#2bf9fa;"> -f</span> PATTERN [PATTERN ...]
+                        One or more regex patterns for the current<span style="font-weight:bold;color:#2bf9fa;"> --color</span> group
+<span style="font-weight:bold;color:#2bf9fa;">  --ignore-case</span>,<span style="font-weight:bold;color:#2bf9fa;"> -i</span>     Case-insensitive regex matching for all patterns
+<span style="font-weight:bold;color:#2bf9fa;">  --no-color</span>            Disable color output (pass input through unchanged)
+<span style="font-weight:bold;color:#2bf9fa;">  --version</span>             show program's version number and exit
+
+Examples:
+  # Single color, one pattern:
+  tail<span style="font-weight:bold;color:#2bf9fa;"> -f</span> app.log | colorize.py<span style="font-weight:bold;color:#2bf9fa;"> --color</span> red<span style="font-weight:bold;color:#2bf9fa;"> --find</span> &quot;ERROR&quot;
+
+  # Single color, multiple patterns:
+  tail<span style="font-weight:bold;color:#2bf9fa;"> -f</span> app.log | colorize.py<span style="font-weight:bold;color:#2bf9fa;"> --color</span> red<span style="font-weight:bold;color:#2bf9fa;"> --find</span> &quot;ERROR&quot; &quot;FATAL&quot; &quot;panic&quot;
+
+  # Multiple colors, each with its own patterns:
+  tail<span style="font-weight:bold;color:#2bf9fa;"> -f</span> app.log | colorize.py \
+<span style="font-weight:bold;color:#2bf9fa;">      --color</span> red<span style="font-weight:bold;color:#2bf9fa;">    --find</span> &quot;ERROR&quot; &quot;FATAL&quot; \
+<span style="font-weight:bold;color:#2bf9fa;">      -c</span> yellow<span style="font-weight:bold;color:#2bf9fa;"> -f</span> &quot;WARN&quot; \
+<span style="font-weight:bold;color:#2bf9fa;">      -c</span> green<span style="font-weight:bold;color:#2bf9fa;">  -f</span> &quot;OK&quot; &quot;success&quot; &quot;done&quot;
+
+  # Mix hex / RGB / names freely:
+  cat access.log | colorize.py \
+<span style="font-weight:bold;color:#2bf9fa;">      --color</span> &quot;#ff8800&quot;<span style="font-weight:bold;color:#2bf9fa;"> --find</span> &quot;[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+&quot; \
+<span style="font-weight:bold;color:#2bf9fa;">      --color</span> &quot;0,200,255&quot;<span style="font-weight:bold;color:#2bf9fa;"> --find</span> &quot;GET&quot; &quot;POST&quot; &quot;PUT&quot; &quot;DELETE&quot;
+
+  # Repeat<span style="font-weight:bold;color:#2bf9fa;"> --find</span> under one<span style="font-weight:bold;color:#2bf9fa;"> --color</span> to keep groups visually separated:
+  cat src.py | colorize.py \
+<span style="font-weight:bold;color:#2bf9fa;">      --color</span> cyan<span style="font-weight:bold;color:#2bf9fa;"> --find</span> &quot;\bdef\b&quot;<span style="font-weight:bold;color:#2bf9fa;"> --find</span> &quot;\bclass\b&quot; \
+<span style="font-weight:bold;color:#2bf9fa;">      --color</span> magenta<span style="font-weight:bold;color:#2bf9fa;"> --find</span> &quot;\bself\b&quot;
+
+Argument order:
+<span style="font-weight:bold;color:#2bf9fa;">  --color</span> must appear before any<span style="font-weight:bold;color:#2bf9fa;"> --find</span>. Each<span style="font-weight:bold;color:#2bf9fa;"> --color</span> opens a new group
+  that all following<span style="font-weight:bold;color:#2bf9fa;"> --find</span> patterns attach to, until the next<span style="font-weight:bold;color:#2bf9fa;"> --color</span>.
+
+Color formats:
+  name        one of: black, red, green, yellow, blue, magenta, cyan, white
+  #xxxxxx     6-digit hex (e.g. #ff8800)
+  #xxx        3-digit hex (e.g. #f80)
+  r,g,b       decimal RGB triple (e.g. 255,136,0)
+
+Notes:
+  Groups are applied in the order given. If an earlier group has already
+  wrapped a span in ANSI escapes, a later group's pattern may not match
+  inside that span.
+
+Case sensitivity:
+  By default, regex matching is case-sensitive. Use<span style="font-weight:bold;color:#2bf9fa;"> --ignore-case</span><span style="font-weight:bold;color:#2bf9fa;"> / -i</span> to
+  match case-insensitively across all patterns. To toggle case for a single
+  pattern instead, use the inline regex flag (?i:...) or (?-i:...):
+      colorize.py<span style="font-weight:bold;color:#2bf9fa;"> -i</span><span style="font-weight:bold;color:#2bf9fa;"> --color</span> red<span style="font-weight:bold;color:#2bf9fa;"> --find</span> &quot;error&quot;<span style="font-weight:bold;color:#2bf9fa;"> --find</span> &quot;(?-i:FATAL)&quot;
+  matches &quot;error&quot;/&quot;ERROR&quot;/&quot;Error&quot; but only the exact &quot;FATAL&quot;.
+</pre>
+</body>
+</html>
