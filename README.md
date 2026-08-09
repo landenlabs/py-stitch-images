@@ -154,8 +154,7 @@ Run `stitch-images.py --help` for the full option reference and more examples.
 ```
 stitch-images/
 ├── stitch-images.py            # Main script (single-file CLI)
-├── version.py                  # Version string (__version__)
-├── VERSION                     # Bare X.Y.Z, mirrors version.py
+├── VERSION                     # Bare X.Y.Z, mirrors the VERSION literal in stitch-images.py
 ├── set-version.bash            # Bump version, commit, tag, push (macOS/Linux)
 ├── set-version.ps1             # Bump version, commit, tag, push (Windows)
 ├── requirements.txt
@@ -176,9 +175,9 @@ the repo root:
 ./set-version.bash -version 1.0.1 -message "Fix overlap-band scoring"
 ```
 
-This updates `VERSION`, `version.py` (`__version__`), and the `<!-- VERSION -->`/
-`<!-- DATE -->` markers in this README, then commits, tags, and pushes. Pushing the
-`vX.Y.Z` tag triggers the release build above.
+This updates `VERSION`, the `VERSION` literal hardcoded in `stitch-images.py`, and the
+version/date markers at the top of this README, then commits, tags, and pushes. Pushing
+the `vX.Y.Z` tag triggers the release build above.
 
 ---
 
